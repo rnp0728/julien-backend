@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: julien
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: julien
+      username: root
+      password: password
+
+  jwt:
+    secret-key: "XKmPX+STmT2q/ZLUSv7h4nRaiM/pdpQMXCpgQmRqdLGqpCXj02LWrLuqGOZbGk+q"
+    expiration: 86400000
+    refresh-token:
+      expiration: 2592000000
+  encryption:
+    algorithm: "AES"
+    secret-key: "XKmPX+STmT2q/ZLUSv7h4nRaiM/pdpQMXCpgQmRqdLGqpCXj02LWrLuqGOZbGk+q"
+
+logging:
+  level:
+    org:
+      springframework:
+        core:
+          env: DEBUG
+server:
+  port: "8080"
+
