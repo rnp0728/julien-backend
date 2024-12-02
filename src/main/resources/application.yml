@@ -25,6 +25,9 @@ logging:
       springframework:
         core:
           env: DEBUG
+    com:
+      infinity:
+        julien: DEBUG
 server:
   port: "8080"
 

@@ -33,6 +33,8 @@ public class LoggingFilter extends OncePerRequestFilter {
 
         try {
             filterChain.doFilter(request, response); // Proceed with the filter chain.
+        } catch (Exception e) {
+            logger.error("Exception during request processing", (Exception) e);
         } finally {
             // Measure processing time.
             Duration duration = Duration.between(startTime, Instant.now());

@@ -22,32 +22,46 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
+
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException, AuthenticationException {
+            throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
+
             if (jwt == null) {
+                logger.debug("No JWT token found in request headers");
                 filterChain.doFilter(request, response);
+                return;
+            }
+
+            if (!jwtUtils.validateJwtToken(jwt)) {
+                logger.warn("Invalid JWT token");
                 throw new AuthenticationException("Invalid or expired JWT token");
             }
-            if (jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.extractUsername(jwt);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null,
-                        userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            String username = jwtUtils.extractUsername(jwt);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities());
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            logger.info("Authentication set for user: {}", username);
+
+        } catch (AuthenticationException ex) {
+            logger.error("Authentication error: {}", ex.getMessage());
+            SecurityContextHolder.clearContext();
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"error\":\"Unauthorized\",\"message\":\"" + ex.getMessage() + "\"}");
+            return;
+        } catch (Exception ex) {
+            logger.error("Unexpected error during authentication: {}", ex.getMessage(), ex);
         }
 
         filterChain.doFilter(request, response);

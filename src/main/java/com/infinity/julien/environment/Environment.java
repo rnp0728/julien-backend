@@ -1,42 +1,45 @@
-package com.infinity.julien.user;
+package com.infinity.julien.environment;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.infinity.julien.organisation.Organisation;
-import com.infinity.julien.role.Role;
+import com.infinity.julien.project.Project;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
-
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @Builder
 @Getter
 @Setter
-@Document(collection = "users")
-public class User {
+@AllArgsConstructor
+@NoArgsConstructor
+@Document(collection = "environments")
+public class Environment {
     @Id
     private String id;
+    @NotBlank
+    private String name;
 
-    private String username;
-    private String password;
-
-    @DBRef
-    private Organisation organisation;
-
-    @DBRef
-    private Set<Role> roles;
+    @Valid
+    private Project project;
+    @NotBlank
+    private String dbUrl;
+    @NotBlank
+    private String dbUser;
+    @NotBlank
+    private String dbPassword;
+    @NotBlank
+    private String dbName;
 
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
 
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

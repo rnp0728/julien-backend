@@ -24,7 +24,8 @@ public class AuthEntryPointJWT implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException, ServletException {
         // Log the error
         logger.error("Unauthorized error: {}", authException.getMessage());
-
+        // Log the error
+        logger.error("Unauthorized error: {}", (Object) authException.getStackTrace());
         // Set response status to 401 Unauthorized
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
