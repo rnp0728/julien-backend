@@ -10,6 +10,6 @@ public class TestController {
 
     @GetMapping
     private String test() {
-        return "Success";
+        return "Connection Established Successfully";
     }
 }

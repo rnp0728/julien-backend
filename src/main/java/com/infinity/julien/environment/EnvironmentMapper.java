@@ -8,7 +8,7 @@ public class EnvironmentMapper {
     public Environment toEnvironment(EnvironmentCreationRequest request) {
         return Environment.builder()
                 .name(request.name())
-                .dbUrl(request.dbUrl())
+                .dbHost(request.dbHost())
                 .dbUser(request.dbUser())
                 .dbPassword(request.dbPassword())
                 .build();

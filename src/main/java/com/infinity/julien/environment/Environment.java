@@ -29,7 +29,7 @@ public class Environment {
     @Valid
     private Project project;
     @NotBlank
-    private String dbUrl;
+    private String dbHost;
     @NotBlank
     private String dbUser;
     @NotBlank

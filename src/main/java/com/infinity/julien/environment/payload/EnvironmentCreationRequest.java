@@ -8,7 +8,7 @@ public record EnvironmentCreationRequest(
         @NotBlank
         String project,
         @NotBlank
-        String dbUrl,
+        String dbHost,
         @NotBlank
         String dbUser,
         @NotBlank

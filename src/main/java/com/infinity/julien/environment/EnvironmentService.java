@@ -4,6 +4,7 @@ import com.infinity.julien.environment.payload.EnvironmentCreationRequest;
 import com.infinity.julien.exception.exceptions.AlreadyExistsException;
 import com.infinity.julien.exception.exceptions.NotFoundException;
 import com.infinity.julien.project.ProjectService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class EnvironmentService {
         return environmentRepository.save(environment);
     }
 
-    public Environment findById(String id) throws NotFoundException {
+    public Environment findById(@NonNull String id) throws NotFoundException {
         return environmentRepository.findById(id).orElseThrow(() -> new NotFoundException("Environment with id " + id + " not found"));
     }
 }

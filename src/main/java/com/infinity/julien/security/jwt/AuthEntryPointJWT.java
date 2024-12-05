@@ -1,7 +1,6 @@
 package com.infinity.julien.security.jwt;
 
 import com.infinity.julien.payloads.ApiResponse;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +19,11 @@ public class AuthEntryPointJWT implements AuthenticationEntryPoint {
     private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJWT.class);
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
+    public void commence(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException
+    ) throws IOException {
         // Log the error
         logger.error("Unauthorized error: {}", authException.getMessage());
         // Log the error
