@@ -1,14 +1,13 @@
 package com.infinity.julien.dbOps;
 
+import com.infinity.julien.dbOps.dtos.MoveRequest;
 import com.infinity.julien.exception.exceptions.NotFoundException;
 import com.infinity.julien.payloads.ApiResponse;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/dbOps")
@@ -22,5 +21,11 @@ public class DbOpsController {
     ) throws NotFoundException {
         var collections = mongoDBOpsService.collections(environmentId);
         return ResponseEntity.ok(ApiResponse.success("Successfully fetched db collections.", collections));
+    }
+
+    @PostMapping("/move")
+    public ResponseEntity<?> moveCollections(@Valid @RequestBody MoveRequest request) throws Exception {
+        var success = mongoDBOpsService.move(request);
+        return ResponseEntity.ok(ApiResponse.success("Successfully fetched db collections.", success));
     }
 }
